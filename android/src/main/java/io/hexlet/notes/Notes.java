@@ -37,6 +37,7 @@ public class Notes extends Activity {
         Button button = new Button(this);
         button.setId(id);
         button.setText(text);
+        button.setAllCaps(false);
         button.setOnClickListener(action);
         page.addView(button);
         return button;

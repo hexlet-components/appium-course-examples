@@ -41,3 +41,11 @@ jobs:
           api-level: 35
           arch: x86_64
           script: bash run-examples.sh
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: emulator-evidence
+          path: |
+            appium.log
+            screenshots/
+            java/build/test-results/test/*.xml

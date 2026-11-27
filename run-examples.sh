@@ -1,7 +1,14 @@
 #!/usr/bin/env bash
 set -eu
 export ANDROID_SERIAL="$(adb devices | awk '/^emulator-.*device$/ {print $1; exit}')"
+adb shell input keyevent KEYCODE_WAKEUP
+adb shell wm dismiss-keyguard
+adb shell settings put global verifier_verify_adb_installs 0
 adb install -r android/build/outputs/apk/debug/*.apk
+mkdir -p screenshots
+adb shell am start -W -n io.hexlet.notes/.Notes
+adb exec-out screencap -p > screenshots/form.png
+adb shell am force-stop io.hexlet.notes
 appium --address 127.0.0.1 > appium.log 2>&1 &
 trap 'kill "$!" || true' EXIT
 curl --retry 30 --retry-connrefused --retry-delay 1 -fsS http://127.0.0.1:4723/status
