@@ -12,3 +12,7 @@ export NOTES_LANG=ru
 gradle -p java test --tests LocatorsTest --rerun-tasks
 python -m pytest python/test_locators.py
 node --test javascript/locators.test.js
+unset NOTES_LANG
+for language in java python javascript; do
+    bash run-diagnosis.sh "$language" appium.log
+done

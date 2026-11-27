@@ -11,7 +11,12 @@ async function waitForTitle(driver) {
   return result.getText();
 }
 
-for (const delayClicks of [1, 2, 3]) {
+async function readAfterPause(driver) {
+  await driver.pause(3000);
+  return driver.$('id=io.hexlet.notes:id/result').getText();
+}
+
+for (const delayClicks of [0, 1, 2, 3]) {
   test(`delayed save, delay button clicks: ${delayClicks}`, async () => {
     const driver = await remote({
       hostname: '127.0.0.1',
@@ -30,7 +35,9 @@ for (const delayClicks of [1, 2, 3]) {
       }
       await driver.$('id=io.hexlet.notes:id/title_input').setValue('Atlas');
       await driver.$('id=io.hexlet.notes:id/save').click();
-      if (delayClicks === 3) {
+      if (delayClicks === 0) {
+        assert.equal(await readAfterPause(driver), 'Atlas');
+      } else if (delayClicks === 3) {
         await assert.rejects(waitForTitle(driver), /Saved title did not appear/);
       } else {
         assert.equal(await waitForTitle(driver), 'Atlas');

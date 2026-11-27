@@ -19,8 +19,13 @@ class WaitsTest {
         return result.getText();
     }
 
+    private String readAfterPause(AndroidDriver driver) throws InterruptedException {
+        Thread.sleep(3000);
+        return driver.findElement(AppiumBy.id("result")).getText();
+    }
+
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 3})
+    @ValueSource(ints = {0, 1, 2, 3})
     void delayedSave(int delayClicks) throws Exception {
         var options = new UiAutomator2Options()
             .setUdid(System.getenv("ANDROID_SERIAL"))
@@ -32,7 +37,9 @@ class WaitsTest {
             }
             driver.findElement(AppiumBy.id("title_input")).sendKeys("Atlas");
             driver.findElement(AppiumBy.id("save")).click();
-            if (delayClicks == 3) {
+            if (delayClicks == 0) {
+                assertEquals("Atlas", readAfterPause(driver));
+            } else if (delayClicks == 3) {
                 assertThrows(TimeoutException.class, () -> waitForTitle(driver));
             } else {
                 assertEquals("Atlas", waitForTitle(driver));

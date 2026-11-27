@@ -1,4 +1,5 @@
 import os
+import time
 
 import pytest
 from appium import webdriver
@@ -15,7 +16,12 @@ def wait_for_title(driver):
     return result.text
 
 
-@pytest.mark.parametrize("delay_clicks", [1, 2, 3])
+def read_after_pause(driver):
+    time.sleep(3)
+    return driver.find_element(AppiumBy.ID, "result").text
+
+
+@pytest.mark.parametrize("delay_clicks", [0, 1, 2, 3])
 def test_delayed_save(delay_clicks):
     options = UiAutomator2Options().load_capabilities({
         "udid": os.environ["ANDROID_SERIAL"],
@@ -28,7 +34,9 @@ def test_delayed_save(delay_clicks):
             driver.find_element(AppiumBy.ID, "delay").click()
         driver.find_element(AppiumBy.ID, "title_input").send_keys("Atlas")
         driver.find_element(AppiumBy.ID, "save").click()
-        if delay_clicks == 3:
+        if delay_clicks == 0:
+            assert read_after_pause(driver) == "Atlas"
+        elif delay_clicks == 3:
             with pytest.raises(TimeoutException):
                 wait_for_title(driver)
         else:
