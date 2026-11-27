@@ -1,0 +1,8 @@
+.gradle/
+build/
+target/
+node_modules/
+__pycache__/
+.venv/
+*.log
+*.png

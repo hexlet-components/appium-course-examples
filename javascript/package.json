@@ -1,0 +1,7 @@
+{
+  "name": "appium-notes-tests",
+  "private": true,
+  "type": "module",
+  "scripts": { "test": "node --test" },
+  "dependencies": { "webdriverio": "9.20.0" }
+}

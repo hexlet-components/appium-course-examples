@@ -1,0 +1,12 @@
+plugins { id 'com.android.application' version '8.7.3' }
+android {
+    namespace 'io.hexlet.notes'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'io.hexlet.notes'
+        minSdk 26
+        targetSdk 32
+        versionCode 1
+        versionName '1.0'
+    }
+}

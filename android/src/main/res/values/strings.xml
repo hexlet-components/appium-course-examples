@@ -1,0 +1,11 @@
+<resources>
+  <string name="save_label">Save</string>
+  <item type="id" name="save"/>
+  <item type="id" name="title_input"/>
+  <item type="id" name="result"/>
+  <item type="id" name="records"/>
+  <item type="id" name="new_note"/>
+  <item type="id" name="delay"/>
+  <item type="id" name="seed"/>
+  <item type="id" name="open_list"/>
+</resources>
