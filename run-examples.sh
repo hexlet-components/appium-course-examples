@@ -22,4 +22,5 @@ node --test javascript/locators.test.js
 unset NOTES_LANG
 for language in java python javascript; do
     bash run-diagnosis.sh "$language" appium.log
+    bash run-diagnosis.sh "$language" appium.log exercise
 done

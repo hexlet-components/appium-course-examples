@@ -17,10 +17,15 @@ test('compares saved title', { skip: !process.env.DIAG_DIR }, async () => {
     },
   });
   try {
-    await driver.$('id=io.hexlet.notes:id/title_input').setValue('Atlas');
+    const exercise = process.env.DIAG_CASE === 'exercise';
+    const title = await driver.$('id=io.hexlet.notes:id/title_input');
+    await title.setValue(exercise ? 'Cider' : 'Atlas');
+    if (exercise) {
+      await writeFile(join(directory, 'input.txt'), await title.getText());
+    }
     await driver.$('id=io.hexlet.notes:id/save').click();
     const actual = await driver.$('id=io.hexlet.notes:id/result').getText();
-    const expected = 'Orbit';
+    const expected = exercise ? 'Cedar' : 'Orbit';
     if (actual !== expected) {
       await driver.saveScreenshot(join(directory, 'screen.png'));
       await writeFile(join(directory, 'comparison.txt'), `${expected}\n${actual}`);

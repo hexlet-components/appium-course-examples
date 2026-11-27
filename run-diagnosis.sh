@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -eu
 
-language=${1:?Usage: bash run-diagnosis.sh java|python|javascript [path/to/appium.log]}
+language=${1:?Usage: bash run-diagnosis.sh java|python|javascript [path/to/appium.log] [demo|exercise]}
 server_log=${2:-appium.log}
+export DIAG_CASE=${3:-demo}
+case "$DIAG_CASE" in
+  demo) expected=Orbit; actual=Atlas ;;
+  exercise) expected=Cedar; actual=Cider ;;
+  *) echo "Unknown case: $DIAG_CASE" >&2; exit 2 ;;
+esac
 test -r "$server_log" || { echo "Start Appium with --log appium.log" >&2; exit 1; }
 export DIAG_DIR
 DIAG_DIR=$(mktemp -d "${TMPDIR:-/tmp}/notes-diagnosis.XXXXXX")
@@ -27,15 +33,19 @@ else
   report="$DIAG_DIR/report.txt"
 fi
 
-printf 'Orbit\nAtlas' | cmp - "$DIAG_DIR/comparison.txt"
+if [ "$DIAG_CASE" = exercise ]; then
+  printf '%s' "$actual" | cmp - "$DIAG_DIR/input.txt"
+fi
+printf '%s\n%s' "$expected" "$actual" | cmp - "$DIAG_DIR/comparison.txt"
 session=$(cat "$DIAG_DIR/session.txt")
 test -n "$session"
-grep -F "$session" "$server_log" >"$DIAG_DIR/appium-session.log"
+grep -F -e "$session" -e "${session:0:8}" "$server_log" >"$DIAG_DIR/appium-session.log"
+grep -Eq '/value([^[:alnum:]_]|$)' "$DIAG_DIR/appium-session.log"
 grep -Eq '/click([^[:alnum:]_]|$)' "$DIAG_DIR/appium-session.log"
 grep -Eq '/text([^[:alnum:]_]|$)' "$DIAG_DIR/appium-session.log"
 grep -Fq "saved title" "$report"
-grep -Fq "Atlas" "$report"
-grep -Fq "Orbit" "$report"
+grep -Fq "$actual" "$report"
+grep -Fq "$expected" "$report"
 test "$(od -An -tx1 -N8 "$DIAG_DIR/screen.png" | tr -d ' \n')" = 89504e470d0a1a0a
 case "$language" in
   java) grep -Fq 'org.opentest4j.AssertionFailedError' "$report" ;;

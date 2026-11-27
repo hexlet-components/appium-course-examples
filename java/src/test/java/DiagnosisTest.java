@@ -19,10 +19,13 @@ class DiagnosisTest {
             .setAppPackage("io.hexlet.notes").setAppActivity(".Notes");
         var driver = new AndroidDriver(URI.create("http://127.0.0.1:4723").toURL(), options);
         try {
-            driver.findElement(AppiumBy.id("title_input")).sendKeys("Atlas");
+            boolean exercise = "exercise".equals(System.getenv("DIAG_CASE"));
+            var title = driver.findElement(AppiumBy.id("title_input"));
+            title.sendKeys(exercise ? "Cider" : "Atlas");
+            if (exercise) Files.writeString(dir.resolve("input.txt"), title.getText());
             driver.findElement(AppiumBy.id("save")).click();
             var actual = driver.findElement(AppiumBy.id("result")).getText();
-            var expected = "Orbit";
+            var expected = exercise ? "Cedar" : "Orbit";
             if (!expected.equals(actual)) {
                 Files.write(dir.resolve("screen.png"), driver.getScreenshotAs(OutputType.BYTES));
                 Files.writeString(dir.resolve("comparison.txt"), expected + "\n" + actual);

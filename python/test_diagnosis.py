@@ -17,10 +17,14 @@ def test_compares_saved_title():
     })
     driver = webdriver.Remote("http://127.0.0.1:4723", options=options)
     try:
-        driver.find_element(AppiumBy.ID, "title_input").send_keys("Atlas")
+        exercise = os.environ.get("DIAG_CASE") == "exercise"
+        title = driver.find_element(AppiumBy.ID, "title_input")
+        title.send_keys("Cider" if exercise else "Atlas")
+        if exercise:
+            (directory / "input.txt").write_text(title.text)
         driver.find_element(AppiumBy.ID, "save").click()
         actual = driver.find_element(AppiumBy.ID, "result").text
-        expected = "Orbit"
+        expected = "Cedar" if exercise else "Orbit"
         if actual != expected:
             (directory / "screen.png").write_bytes(driver.get_screenshot_as_png())
             (directory / "comparison.txt").write_text(f"{expected}\n{actual}")
