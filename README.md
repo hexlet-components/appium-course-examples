@@ -6,7 +6,7 @@
 
 Установите Android Studio и в SDK Manager выберите Android SDK Platform 35, Android SDK Platform-Tools и Android Emulator. В Device Manager создайте телефон с Android 15 (API 35) и запустите его. Для Apple Silicon подходит образ arm64-v8a, для компьютера x86-64 выбирайте x86_64. Установите JDK 17 и Node.js 22. Команды ниже рассчитаны на Bash. Укажите путь к SDK из SDK Manager в ANDROID_HOME, путь к JDK в JAVA_HOME, добавьте каталоги platform-tools и emulator из SDK в PATH.
 
-Скачайте [учебную сборку notes.apk](https://github.com/hexlet-components/appium-course-examples/releases/download/v1.0/notes.apk) и установите её на учебный эмулятор. Серийный номер возьмите из строки со статусом device в ответе adb devices.
+Скачайте [учебную сборку notes.apk](https://github.com/hexlet-components/appium-course-examples/releases/download/v1.1/notes.apk) и установите её на учебный эмулятор. Серийный номер возьмите из строки со статусом device в ответе adb devices.
 
 ```sh
 adb devices
