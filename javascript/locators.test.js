@@ -21,7 +21,7 @@ test('matches button', async () => {
     const button = await driver.$('id=io.hexlet.notes:id/save');
     const english = await driver.$$('android=new UiSelector().text("Save")');
     assert.equal(await button.getText(), language === 'ru' ? 'Сохранить' : 'Save');
-    assert.deepEqual(english.map(element => element.elementId), language === 'ru' ? [] : [button.elementId]);
+    assert.deepEqual(Array.from(english, element => element.elementId), language === 'ru' ? [] : [button.elementId]);
   } finally {
     await driver.deleteSession();
   }
